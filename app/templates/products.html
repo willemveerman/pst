@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>PRODUCTS</title>
+</head>
+<body>
+{% if error_message %}
+<p>{{error_message}}</p>
+{% else %}
+{% for product in product_list %}
+<div style="background-color: {{ product['color'] }} ; padding: 15px;">
+    <div style="display: inline-block; background-color: white; padding: 2px;">
+        <p style="font-family:verdana; padding: 4px;">{{ product["name"] }}</p>
+    </div>
+</div>
+<p></p>
+{% endfor %}
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,4 @@
+apiVersion: v2
+name: product-scraper
+version: 0.1.0
+description: A pod which scrapes a list of products and displays them in HTML

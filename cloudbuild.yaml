@@ -1,0 +1,32 @@
+steps:
+- name: gcr.io/cloud-builders/docker
+  entrypoint: 'bash'
+  args: [ '-c', "chmod +x ./scripts/action.sh && ./scripts/action.sh --push" ]
+  env:
+  - 'PROJECT_ID=$PROJECT_ID'
+  - 'REPO_NAME=$REPO_NAME'
+  - 'BRANCH_NAME=$BRANCH_NAME'
+  - 'TAG_NAME=$TAG_NAME'
+  - 'BASE_BRANCH=$_BASE_BRANCH'
+
+- name: "gcr.io/cloud-builders/git"
+  args: ["clone", "https://github.com/GoogleCloudPlatform/cloud-builders-community.git", "/workspace/__communitybuilders/"]
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '--tag=gcr.io/$PROJECT_ID/helm:${_HELM_VERSION}', '--tag=gcr.io/$PROJECT_ID/helm:latest', '--build-arg', 'HELM_VERSION=v${_HELM_VERSION}', '/workspace/__communitybuilders/helm']
+
+- name: 'gcr.io/$PROJECT_ID/helm'
+  entrypoint: 'bash'
+  args: [ '-c', "chmod +x ./scripts/action.sh && ./scripts/action.sh --deploy" ]
+  env:
+  - 'PROJECT_ID=$PROJECT_ID'
+  - 'RELEASE_NAME=$REPO_NAME'
+  - 'BASE_BRANCH=$_BASE_BRANCH'
+  - 'CLOUDSDK_COMPUTE_ZONE=europe-west2-a'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=my-first-cluster-1'
+  - 'DEPLOY_TO=test'
+  - 'TAG_NAME=$TAG_NAME'
+  - 'HELM_DEPLOY=FALSE'
+
+substitutions:
+  _HELM_VERSION: 3.4.2

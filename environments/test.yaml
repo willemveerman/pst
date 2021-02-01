@@ -1,0 +1,6 @@
+namespace: default
+
+deployment:
+  image: gcr.io/pstest-302720/pstest
+  tag: 0.1.13
+

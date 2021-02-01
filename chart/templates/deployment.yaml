@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: product-scraper
+    app.kubernetes.io/instance: product-scraper-{{ .Release.Name }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: product-scraper
+      app.kubernetes.io/instance: product-scraper-{{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+      labels:
+        app.kubernetes.io/name: product-scraper
+        app.kubernetes.io/instance: product-scraper-{{ .Release.Name }}
+    spec:
+      containers:
+      - name: product-scraper
+        image: {{ .Values.deployment.image }}:{{ .Values.deployment.tag }}
+        args: ["--port={{ .Values.deployment.port }}"]
+        ports:
+          - containerPort: {{ .Values.deployment.port }}
+            name: http
+        resources:
+          limits:
+            cpu: {{ .Values.deployment.cpu_limit }}
+            memory: {{ .Values.deployment.memory_limit }}
+          requests:
+            cpu: {{ .Values.deployment.cpu_request }}
+            memory: {{ .Values.deployment.memory_request }}
