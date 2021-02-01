@@ -1,0 +1,15 @@
+deployment:
+  image: willemveerman/pstest
+  tag: latest
+  port: 5000
+  replicas: 1
+  memory_limit: 300Mi
+  memory_request: 100Mi
+  cpu_limit: 200m
+  cpu_request: 10m
+
+hpa:
+  minReplicas: 1
+  maxReplicas: 10
+  cpu_averageUtilization: 20
+  memory_averageValue: 25Mi
